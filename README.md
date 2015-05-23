@@ -1,2 +1,1 @@
-# twisted-apns
-Twisted client for Apple Push Notification Service
+# Twisted client for Apple Push Notification Service (APNs)
