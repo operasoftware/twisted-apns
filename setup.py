@@ -13,5 +13,5 @@ setup(
   download_url = 'https://github.com/operasoftware/twisted-apns/tarball/0.1',
   keywords = ['twisted', 'apns'],
   classifiers = [],
-  install_requires=['Twisted']
+  install_requires=['Twisted', 'pyOpenSSL']
 )
