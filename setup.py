@@ -3,7 +3,7 @@ from distutils.core import setup
 
 
 setup(
-  name = 'apns',
+  name = 'twisted-apns',
   packages = ['apns'],
   version = '0.1',
   description = 'Twisted client for Apple Push Notification Service (APNs)',
