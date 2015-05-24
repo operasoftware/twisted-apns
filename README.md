@@ -23,10 +23,9 @@ reactor.connectSSL(factory.hostname,
 
 def send():
     token = '00'  # Set to something valid.
-    payload={'aps': {'alert': "What's up?",
-                     'sound': 'default',
-                     'badge': 3,
-                     'content-available': 1}}
+    payload = {'aps': {'alert': "What's up?",
+                       'sound': 'default',
+                       'badge': 3}}
     notification = Notification(token=token,
                                 expire=Notification.EXPIRE_IMMEDIATELY,
                                 payload=payload)
