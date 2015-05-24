@@ -57,4 +57,4 @@ docs/_build/
 target/
 
 # Vim swap file
-*.swp
+*.sw[a-z]

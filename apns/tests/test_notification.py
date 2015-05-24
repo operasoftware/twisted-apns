@@ -87,3 +87,15 @@ class NotificationTestCase(TestCase):
 
         with self.assertRaises(NotificationInvalidIdError):
             notification.from_binary_string(stream)
+
+    @patch(CLASS + 'EXPIRE_IMMEDIATELY', 123)
+    @patch(CLASS + 'PRIORITIES', [0])
+    def test_expire_immediately(self):
+        stream = Notification(payload='',
+                              token='00',
+                              expire=123,
+                              priority=0).to_binary_string()
+        notification = Notification()
+        notification.from_binary_string(stream)
+
+        self.assertEqual(notification.expire, 123)

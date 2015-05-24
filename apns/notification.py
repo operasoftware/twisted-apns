@@ -35,10 +35,10 @@ class NotificationInvalidIdError(NotificationError):
 
 class Notification(object):
     COMMAND = NOTIFICATION
-    NORMAL = 5
-    IMMEDIATELY = 10
+    PRIORITY_NORMAL = 5
+    PRIORITY_IMMEDIATELY = 10
 
-    PRIORITIES = (NORMAL, IMMEDIATELY)
+    PRIORITIES = (PRIORITY_NORMAL, PRIORITY_IMMEDIATELY)
 
     PAYLOAD = 2
     TOKEN = 1
@@ -46,8 +46,10 @@ class Notification(object):
     NOTIFICATION_ID = 3
     EXPIRE = 4
 
-    def __init__(self, payload=None, token=None, expire=None, priority=NORMAL,
-                 iden=0):
+    EXPIRE_IMMEDIATELY = 0
+
+    def __init__(self, payload=None, token=None, expire=None,
+                 priority=PRIORITY_NORMAL, iden=0):
         self.payload = payload
         self.token = token
         self.expire = expire
@@ -72,7 +74,9 @@ class Notification(object):
             raise NotificationPayloadNotSerializableError()
 
         fmt = ">BIBH{0}sBH{1}sBHIBHIBHB".format(len(token), len(payload))
-        expire = datetime_to_timestamp(self.expire)
+
+        expire = (0 if self.expire == self.EXPIRE_IMMEDIATELY else
+                  datetime_to_timestamp(self.expire))
 
         # |COMMAND|FRAME-LEN|{token}|{payload}|{id:4}|{expire:4}|{priority:1}
         # 5 items, each 3 bytes prefix, then each item length
@@ -113,7 +117,8 @@ class Notification(object):
                 self.iden = struct.unpack('>I', payload)[0]
             elif iden == self.EXPIRE:
                 payload = struct.unpack('>I', payload)[0]
-                self.expire = datetime.fromtimestamp(payload)
+                self.expire = (self.EXPIRE_IMMEDIATELY if payload == 0 else
+                               datetime.fromtimestamp(payload))
             else:
                 raise NotificationInvalidIdError()
 
