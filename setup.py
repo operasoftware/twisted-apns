@@ -2,15 +2,20 @@
 from distutils.core import setup
 
 
+VERSION = '0.4'
+URL = 'https://github.com/operasoftware/twisted-apns'
+DOWNLOAD_URL = URL + '/tarball/' + VERSION
+
+
 setup(
   name = 'twisted-apns',
   packages = ['apns'],
-  version = '0.4',
+  version = VERSION,
   description = 'Twisted client for Apple Push Notification Service (APNs)',
   author = 'Michał Łowicki',
   author_email = 'mlowicki@opera.com',
-  url = 'https://github.com/operasoftware/twisted-apns',
-  download_url = 'https://github.com/operasoftware/twisted-apns/tarball/0.4',
+  url = URL,
+  download_url = DOWNLOAD_URL,
   keywords = ['twisted', 'apns'],
   classifiers = [],
   install_requires=['Twisted', 'pyOpenSSL']
