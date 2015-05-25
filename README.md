@@ -1,4 +1,6 @@
 # Twisted client for APNs
+![Build status](https://travis-ci.org/operasoftware/twisted-apns.svg)
+
 Based on [official iOS documentation](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/CommunicatingWIthAPS.html).
 ## Usage
 
