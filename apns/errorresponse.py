@@ -16,18 +16,30 @@ class ErrorResponseInvalidCodeError(ErrorResponseError):
 
 
 class ErrorResponse(object):
+    CODE_OK = 0
+    CODE_PROCESSING_ERROR = 1
+    CODE_MISSING_TOKEN = 2
+    CODE_MISSING_TOPIC = 3
+    CODE_MISSING_PAYLOAD = 4
+    CODE_INVALID_TOKEN_SIZE = 5
+    CODE_INVALID_TOPIC_SIZE = 6
+    CODE_INVALID_PAYLOAD_SIZE = 7
+    CODE_INVALID_TOKEN = 8
+    CODE_SHUTDOWN = 10
+    CODE_UNKNOWN = 255
+
     CODES = {
-        0: 'No errors encountered',
-        1: 'Processing error',
-        2: 'Missing device token',
-        3: 'Missing topic',
-        4: 'Missing payload',
-        5: 'Invalid token size',
-        6: 'Invalid topic size',
-        7: 'Invalid payload size',
-        8: 'Invalid token',
-        10: 'Shutdown',
-        255: 'Unknown'
+        CODE_OK: 'No errors encountered',
+        CODE_PROCESSING_ERROR: 'Processing error',
+        CODE_MISSING_TOKEN: 'Missing token',
+        CODE_MISSING_TOPIC: 'Missing topic',
+        CODE_MISSING_PAYLOAD: 'Missing payload',
+        CODE_INVALID_TOKEN_SIZE: 'Invalid token size',
+        CODE_INVALID_TOPIC_SIZE: 'Invalid topic size',
+        CODE_INVALID_PAYLOAD_SIZE: 'Invalid payload size',
+        CODE_INVALID_TOKEN: 'Invalid token',
+        CODE_SHUTDOWN: 'Shutdown',
+        CODE_UNKNOWN: 'Unknown'
     }
 
     FORMAT = '>BBI'
