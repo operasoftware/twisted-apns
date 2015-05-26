@@ -4,6 +4,7 @@ from twisted.internet import ssl
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 
 from apns.errorresponse import ErrorResponse
+from apns.listenable import Listenable
 
 
 logger = logging.getLogger(__name__)
@@ -33,18 +34,19 @@ class GatewayClient(Protocol):
         self.factory.errorReceived(error)
 
 
-class GatewayClientFactory(ReconnectingClientFactory):
+class GatewayClientFactory(ReconnectingClientFactory, Listenable):
     protocol = GatewayClient
     maxDelay = 10
     ENDPOINTS = {
         'pub': ('gateway.push.apple.com', 2195),
         'dev': ('gateway.sandbox.push.apple.com', 2195)
     }
+    EVENT_ERROR_RECEIVED = 'error received'
 
-    def __init__(self, endpoint, pem, onErrorReceived=None):
+    def __init__(self, endpoint, pem):
+        Listenable.__init__(self)
         self.hostname, self.port = self.ENDPOINTS[endpoint]
         self.client = None
-        self.onErrorReceived = onErrorReceived
 
         with open(pem) as f:
             self.certificate = ssl.PrivateCertificate.loadPEM(f.read())
@@ -57,9 +59,7 @@ class GatewayClientFactory(ReconnectingClientFactory):
 
     def errorReceived(self, error):
         logger.debug('Gateway error received: %s', error)
-
-        if self.onErrorReceived is not None:
-            self.onErrorReceived(error)
+        self.dispatchEvent(self.EVENT_ERROR_RECEIVED, error)
 
     def clientConnectionFailed(self, connector, reason):
         logger.debug('Gateway connection failed: %s',

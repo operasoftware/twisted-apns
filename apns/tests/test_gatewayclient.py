@@ -115,15 +115,11 @@ class GatewayClientFactoryTestCase(TestCase):
         self.assertIsNone(self.factory.client)
 
     def test_error_received(self):
-        self.factory.onErrorReceived = Mock()
         error = Mock()
+        event = self.factory.EVENT_ERROR_RECEIVED
+        callback = Mock()
+        self.factory.listen(event, callback)
 
         self.factory.errorReceived(error)
 
-        self.factory.onErrorReceived.assert_called_once_with(error)
-
-    def test_error_received_no_callback(self):
-        self.factory.onErrorReceived = None
-        error = Mock()
-
-        self.factory.errorReceived(error)
+        callback.assert_called_once_with(event, self.factory, error)

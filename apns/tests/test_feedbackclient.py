@@ -36,9 +36,7 @@ class FeedbackClientFactoryTestCase(TestCase):
     @patch(MODULE + 'ssl.PrivateCertificate.loadPEM', Mock())
     @patch(MODULE + 'FeedbackClientFactory.ENDPOINTS', {'pub': ('foo', 'bar')})
     def setUp(self):
-        self.onFeedbacksReceived = Mock()
-        self.factory = FeedbackClientFactory('pub', __file__,
-                                             self.onFeedbacksReceived)
+        self.factory = FeedbackClientFactory('pub', __file__)
 
     @patch(MODULE + 'ReconnectingClientFactory.clientConnectionFailed')
     def test_client_connection_failed(self, client_connection_failed_mock):
@@ -64,12 +62,10 @@ class FeedbackClientFactoryTestCase(TestCase):
 
     def test_feedbacks_received(self):
         feedbacks = Mock()
+        callback = Mock()
+        event = self.factory.EVENT_FEEDBACKS_RECEIVED
+        self.factory.listen(event, callback)
 
         self.factory.feedbacksReceived(feedbacks)
 
-        self.onFeedbacksReceived.assert_called_once_with(feedbacks)
-
-    def test_feedbacks_received_no_callback(self):
-        self.factory.onFeedbacksReceived = None
-
-        self.factory.feedbacksReceived(Mock())
+        callback.assert_called_once_with(event, self.factory, feedbacks)
