@@ -1,6 +1,7 @@
 # Twisted client for APNs
-![Build status](https://travis-ci.org/operasoftware/twisted-apns.svg)
-![Version](https://img.shields.io/pypi/v/twisted-apns.svg)
+[![Build status](https://travis-ci.org/operasoftware/twisted-apns.svg)](https://pypi.python.org/pypi/twisted-apns)
+[![Version](https://img.shields.io/pypi/v/twisted-apns.svg)](https://pypi.python.org/pypi/twisted-apns)
+[![Code Climate](https://codeclimate.com/github/operasoftware/twisted-apns/badges/gpa.svg)](https://codeclimate.com/github/operasoftware/twisted-apns)
 
 Based on [official iOS documentation](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/CommunicatingWIthAPS.html).
 ## Usage
