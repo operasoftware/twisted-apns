@@ -1,5 +1,5 @@
 # Twisted client for APNs
-[![Build status](https://travis-ci.org/operasoftware/twisted-apns.svg)](https://pypi.python.org/pypi/twisted-apns)
+[![Build status](https://travis-ci.org/operasoftware/twisted-apns.svg)](https://travis-ci.org/operasoftware/twisted-apns)
 [![Version](https://img.shields.io/pypi/v/twisted-apns.svg)](https://pypi.python.org/pypi/twisted-apns)
 [![Code Climate](https://codeclimate.com/github/operasoftware/twisted-apns/badges/gpa.svg)](https://codeclimate.com/github/operasoftware/twisted-apns)
 
