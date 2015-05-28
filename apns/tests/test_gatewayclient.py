@@ -56,10 +56,14 @@ class GatewayClientFactoryTestCase(TestCase):
 
     def test_connection_made(self):
         client = Mock()
+        event = self.factory.EVENT_CONNECTION_MADE
+        callback = Mock()
+        self.factory.listen(event, callback)
 
         self.factory.connectionMade(client)
 
         self.assertEqual(self.factory.client, client)
+        callback.assert_called_once_with(event, self.factory)
 
     @patch(CLASS + '_onConnectionLost')
     @patch(MODULE + 'ReconnectingClientFactory.clientConnectionFailed')
@@ -109,10 +113,15 @@ class GatewayClientFactoryTestCase(TestCase):
 
     def test_on_connection_lost(self):
         self.factory.client = Mock()
+        event = self.factory.EVENT_CONNECTION_LOST
+        callback = Mock()
+        self.factory.listen(event, callback)
 
         self.factory._onConnectionLost()
 
         self.assertIsNone(self.factory.client)
+
+        callback.assert_called_once_with(event, self.factory)
 
     def test_error_received(self):
         error = Mock()

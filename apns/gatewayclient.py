@@ -42,6 +42,8 @@ class GatewayClientFactory(ReconnectingClientFactory, Listenable):
         'dev': ('gateway.sandbox.push.apple.com', 2195)
     }
     EVENT_ERROR_RECEIVED = 'error received'
+    EVENT_CONNECTION_MADE = 'connection made'
+    EVENT_CONNECTION_LOST = 'connection lost'
 
     def __init__(self, endpoint, pem):
         Listenable.__init__(self)
@@ -53,9 +55,11 @@ class GatewayClientFactory(ReconnectingClientFactory, Listenable):
 
     def connectionMade(self, client):
         self.client = client
+        self.dispatchEvent(self.EVENT_CONNECTION_MADE)
 
     def _onConnectionLost(self):
         self.client = None
+        self.dispatchEvent(self.EVENT_CONNECTION_LOST)
 
     def errorReceived(self, error):
         logger.debug('Gateway error received: %s', error)
