@@ -11,6 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 class FeedbackClient(Protocol):
+    """
+    Implements client-side of APN feedback service protocol. Should be spawned
+    by FeedbackClientFactory and generally should not be used standalone.
+    """
     def connectionMade(self):
         logger.debug('Feedback connection made: %s:%d', self.factory.hostname,
                      self.factory.port)
@@ -21,6 +25,11 @@ class FeedbackClient(Protocol):
 
 
 class FeedbackClientFactory(ReconnectingClientFactory, Listenable):
+    """
+    Allows connecting to the APN feedback service and receiving feedback
+    information. To process received feedbacks in your code, add a callback to
+    EVENT_FEEDBACKS_RECEIVED.
+    """
     protocol = FeedbackClient
     maxDelay = 600
     ENDPOINTS = {
@@ -30,6 +39,11 @@ class FeedbackClientFactory(ReconnectingClientFactory, Listenable):
     EVENT_FEEDBACKS_RECEIVED = 'feedbacks received'
 
     def __init__(self, endpoint, pem):
+        """
+        Init an instance of FeedbackClientFactory.
+        :param endpoint: Either 'pub' for production or 'dev' for development.
+        :param pem: Path to a provider private certificate file.
+        """
         Listenable.__init__(self)
         self.hostname, self.port = self.ENDPOINTS[endpoint]
         self.client = None

@@ -8,32 +8,56 @@ from apns.utils import datetime_to_timestamp
 
 
 class NotificationError(Exception):
+    """To be thrown upon failures on notification processing."""
     pass
 
 
 class NotificationInvalidPriorityError(NotificationError):
+    """
+    Thrown while packing a notification, if the notification priority field is
+    invalid.
+    """
     pass
 
 
 class NotificationPayloadNotSerializableError(NotificationError):
+    """
+    Thrown while packing a notification, if the notification payload field
+    could not be serialized to JSON.
+    """
     pass
 
 
 class NotificationTokenUnhexlifyError(NotificationError):
-
+    """
+    Thrown while packing a notification, if the notification token field could
+    not be converted to binary from its hex representation.
+    """
     def __init__(self, msg):
         super(NotificationTokenUnhexlifyError, self).__init__(msg)
 
 
 class NotificationInvalidCommandError(NotificationError):
+    """
+    Thrown while unpacking a notification, if the notification command field
+    contains invalid value.
+    """
     pass
 
 
 class NotificationInvalidIdError(NotificationError):
+    """
+    Thrown while unpacking a notification, if the notification structure is
+    invalid.
+    """
     pass
 
 
 class Notification(object):
+    """
+    A representation of the structure of a notification request, as defined in
+    the iOS documentation.
+    """
     COMMAND = NOTIFICATION
     PRIORITY_NORMAL = 5
     PRIORITY_IMMEDIATELY = 10
@@ -50,6 +74,17 @@ class Notification(object):
 
     def __init__(self, payload=None, token=None, expire=None,
                  priority=PRIORITY_NORMAL, iden=0):
+        """
+        Init an instance of Notification.
+        :param payload: object containing structure of payload to be sent to
+        remote device.
+        :param token: string containing target device token in hex
+        :param expire: notification expire time as UNIX timestamp, 0 means that
+        notification expires immediately.
+        :param priority: notification priority, as described in iOS
+        documentation
+        :param iden: notification ID, as described in iOS documentation
+        """
         self.payload = payload
         self.token = token
         self.expire = expire
@@ -60,6 +95,7 @@ class Notification(object):
         return '<Notification: %s>' % self.token
 
     def to_binary_string(self):
+        """Pack the notification to binary form and return it as string."""
         if self.priority not in self.PRIORITIES:
             raise NotificationInvalidPriorityError()
 
@@ -90,6 +126,7 @@ class Notification(object):
         return message
 
     def from_binary_string(self, notification):
+        """Unpack the notification from binary string."""
         command = struct.unpack('>B', notification[0])[0]
 
         if command != self.COMMAND:
