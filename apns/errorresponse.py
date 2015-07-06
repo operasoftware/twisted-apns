@@ -10,7 +10,7 @@ class ErrorResponseError(Exception):
 
 class ErrorResponseInvalidCommandError(ErrorResponseError):
     """
-    Thrown by ErrorResponse while unpacking, if the command field contains 
+    Thrown by ErrorResponse while unpacking, if the command field contains
     invalid value.
     """
     pass
@@ -26,7 +26,7 @@ class ErrorResponseInvalidCodeError(ErrorResponseError):
 
 class ErrorResponse(object):
     """
-    A representation of the structure of an error response, as defined in the 
+    A representation of the structure of an error response, as defined in the
     iOS documentation.
     """
     CODE_OK = 0

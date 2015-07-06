@@ -17,7 +17,7 @@ class GatewayClientError(Exception):
 
 class GatewayClientNotSetError(GatewayClientError):
     """
-    Thrown when attempted to send a notification while connection is not 
+    Thrown when attempted to send a notification while connection is not
     established.
     """
     pass
@@ -25,9 +25,9 @@ class GatewayClientNotSetError(GatewayClientError):
 
 class GatewayClient(Protocol):
     """
-    Implements client-side of APN gateway protocol. Should be spawned by 
+    Implements client-side of APN gateway protocol. Should be spawned by
     GatewayClientFactory and generally should not be used standalone.
-    """    
+    """
     def connectionMade(self):
         logger.debug('Gateway connection made: %s:%d', self.factory.hostname,
                      self.factory.port)

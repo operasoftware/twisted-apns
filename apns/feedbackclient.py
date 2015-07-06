@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class FeedbackClient(Protocol):
     """
-    Implements client-side of APN feedback service protocol. Should be spawned 
+    Implements client-side of APN feedback service protocol. Should be spawned
     by FeedbackClientFactory and generally should not be used standalone.
     """
     def connectionMade(self):
@@ -26,8 +26,8 @@ class FeedbackClient(Protocol):
 
 class FeedbackClientFactory(ReconnectingClientFactory, Listenable):
     """
-    Allows connecting to the APN feedback service and receiving feedback 
-    information. To process received feedbacks in your code, add a callback to 
+    Allows connecting to the APN feedback service and receiving feedback
+    information. To process received feedbacks in your code, add a callback to
     EVENT_FEEDBACKS_RECEIVED.
     """
     protocol = FeedbackClient

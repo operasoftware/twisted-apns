@@ -9,7 +9,7 @@ class Listenable(object):
 
     def listen(self, event, callback):
         """
-        Assign a callback to an event.    
+        Assign a callback to an event.
         :param event: an event which triggers execution of the callback.
         Particular values are defined by derivative classes.
         :param callback: a callback to be fired when event occurs.
@@ -19,7 +19,7 @@ class Listenable(object):
     def unlisten(self, event, callback):
         """
         Remove previously assigned callback.
-        :return True in case the callback was successfully removed, False 
+        :return True in case the callback was successfully removed, False
         otherwise.
         """
         try:
@@ -33,7 +33,7 @@ class Listenable(object):
         """
         Fire all callbacks assigned to a particular event. To be called by
         derivative classes.
-        :param *args: Additional arguments to be passed to the callback 
+        :param *args: Additional arguments to be passed to the callback
         function.
         """
         for callback in self.listeners[event]:

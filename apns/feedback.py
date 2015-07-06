@@ -7,7 +7,7 @@ from apns.utils import datetime_to_timestamp
 
 class Feedback(object):
     """
-    A representation of the structure of a feedback response, as defined in the 
+    A representation of the structure of a feedback response, as defined in the
     iOS documentation.
     """
     FORMAT_PREFIX = '>IH'
@@ -24,7 +24,7 @@ class Feedback(object):
     def from_binary_string(cls, stream):
         """
         Read feedback information from the stream and unpack it.
-        :param stream: A stream of feedback data from APN. Can contain multiple 
+        :param stream: A stream of feedback data from APN. Can contain multiple
         feedback tuples, as defined in the feedback service protocol.
         :return A list containing all unpacked feedbacks.
         """

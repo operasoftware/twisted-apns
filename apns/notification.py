@@ -22,7 +22,7 @@ class NotificationInvalidPriorityError(NotificationError):
 
 class NotificationPayloadNotSerializableError(NotificationError):
     """
-    Thrown by Notification while packing, if the notification payload field 
+    Thrown by Notification while packing, if the notification payload field
     could not be serialized to JSON.
     """
     pass
@@ -55,7 +55,7 @@ class NotificationInvalidIdError(NotificationError):
 
 class Notification(object):
     """
-    A representation of the structure of a notification request, as defined in 
+    A representation of the structure of a notification request, as defined in
     the iOS documentation.
     """
     COMMAND = NOTIFICATION
@@ -76,12 +76,12 @@ class Notification(object):
                  priority=PRIORITY_NORMAL, iden=0):
         """
         Init an instance of Notification.
-        :param payload: object containing structure of payload to be sent to 
+        :param payload: object containing structure of payload to be sent to
         remote device.
         :param token: string containing target device token in hex
         :param expire: notification expire time as UNIX timestamp, 0 means that
         notification expires immediately.
-        :param priority: notification priority, as described in iOS 
+        :param priority: notification priority, as described in iOS
         documentation
         :param iden: notification ID, as described in iOS documentation
         """
