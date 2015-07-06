@@ -8,13 +8,13 @@ from apns.utils import datetime_to_timestamp
 
 
 class NotificationError(Exception):
-    """To be thrown from Notification class."""
+    """To be thrown upon failures on notification processing."""
     pass
 
 
 class NotificationInvalidPriorityError(NotificationError):
     """
-    Thrown by Notification while packing, if the notification priority field is
+    Thrown while packing a notification, if the notification priority field is
     invalid.
     """
     pass
@@ -22,7 +22,7 @@ class NotificationInvalidPriorityError(NotificationError):
 
 class NotificationPayloadNotSerializableError(NotificationError):
     """
-    Thrown by Notification while packing, if the notification payload field
+    Thrown while packing a notification, if the notification payload field
     could not be serialized to JSON.
     """
     pass
@@ -30,7 +30,7 @@ class NotificationPayloadNotSerializableError(NotificationError):
 
 class NotificationTokenUnhexlifyError(NotificationError):
     """
-    Thrown by Notification while packing, if the notification token field could
+    Thrown while packing a notification, if the notification token field could
     not be converted to binary from its hex representation.
     """
     def __init__(self, msg):
@@ -39,7 +39,7 @@ class NotificationTokenUnhexlifyError(NotificationError):
 
 class NotificationInvalidCommandError(NotificationError):
     """
-    Thrown by Notification while unpacking, if the notification command field
+    Thrown while unpacking a notification, if the notification command field
     contains invalid value.
     """
     pass
@@ -47,7 +47,7 @@ class NotificationInvalidCommandError(NotificationError):
 
 class NotificationInvalidIdError(NotificationError):
     """
-    Thrown by Notification while unpacking, if the notification structure is
+    Thrown while unpacking a notification, if the notification structure is
     invalid.
     """
     pass

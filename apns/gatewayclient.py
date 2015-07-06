@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class GatewayClientError(Exception):
-    """Thrown by gateway client classes."""
+    """To be thrown upon failures on communication with APN gateway."""
     pass
 
 

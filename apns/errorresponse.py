@@ -4,13 +4,13 @@ from apns.commands import ERROR_RESPONSE
 
 
 class ErrorResponseError(Exception):
-    """To be thrown from ErrorResponse class."""
+    """To be thrown upon failures on error response processing."""
     pass
 
 
 class ErrorResponseInvalidCommandError(ErrorResponseError):
     """
-    Thrown by ErrorResponse while unpacking, if the command field contains
+    Thrown while unpacking an error response, if the command field contains
     invalid value.
     """
     pass
@@ -18,7 +18,7 @@ class ErrorResponseInvalidCommandError(ErrorResponseError):
 
 class ErrorResponseInvalidCodeError(ErrorResponseError):
     """
-    Thrown by ErrorResponse while unpacking, if the status code field contains
+    Thrown while unpacking an error response, if the status code field contains
     invalid value.
     """
     pass
