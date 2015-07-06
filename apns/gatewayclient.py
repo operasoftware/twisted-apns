@@ -11,14 +11,23 @@ logger = logging.getLogger(__name__)
 
 
 class GatewayClientError(Exception):
+    """Thrown by gateway client classes."""
     pass
 
 
 class GatewayClientNotSetError(GatewayClientError):
+    """
+    Thrown when attempted to send a notification while connection is not 
+    established.
+    """
     pass
 
 
 class GatewayClient(Protocol):
+    """
+    Implements client-side of APN gateway protocol. Should be spawned by 
+    GatewayClientFactory and generally should not be used standalone.
+    """    
     def connectionMade(self):
         logger.debug('Gateway connection made: %s:%d', self.factory.hostname,
                      self.factory.port)
@@ -35,6 +44,7 @@ class GatewayClient(Protocol):
 
 
 class GatewayClientFactory(ReconnectingClientFactory, Listenable):
+    """Allows connecting to the APN gateway and sending notifications."""
     protocol = GatewayClient
     maxDelay = 10
     ENDPOINTS = {
@@ -46,6 +56,11 @@ class GatewayClientFactory(ReconnectingClientFactory, Listenable):
     EVENT_CONNECTION_LOST = 'connection lost'
 
     def __init__(self, endpoint, pem):
+        """
+        Init an instance of GatewayClientFactory.
+        :param endpoint: Either 'pub' for production or 'dev' for development.
+        :param pem: Path to a provider private certificate file.
+        """
         Listenable.__init__(self)
         self.hostname, self.port = self.ENDPOINTS[endpoint]
         self.client = None
@@ -83,9 +98,11 @@ class GatewayClientFactory(ReconnectingClientFactory, Listenable):
 
     @property
     def connected(self):
+        """Return True if connection with APN is established."""
         return self.client is not None
 
     def send(self, notification):
+        """Send prepared notification to the APN."""
         logger.debug('Gateway send notification')
 
         if self.client is None:

@@ -4,18 +4,31 @@ from apns.commands import ERROR_RESPONSE
 
 
 class ErrorResponseError(Exception):
+    """To be thrown from ErrorResponse class."""
     pass
 
 
 class ErrorResponseInvalidCommandError(ErrorResponseError):
+    """
+    Thrown by ErrorResponse while unpacking, if the command field contains 
+    invalid value.
+    """
     pass
 
 
 class ErrorResponseInvalidCodeError(ErrorResponseError):
+    """
+    Thrown by ErrorResponse while unpacking, if the status code field contains
+    invalid value.
+    """
     pass
 
 
 class ErrorResponse(object):
+    """
+    A representation of the structure of an error response, as defined in the 
+    iOS documentation.
+    """
     CODE_OK = 0
     CODE_PROCESSING_ERROR = 1
     CODE_MISSING_TOKEN = 2
@@ -52,6 +65,7 @@ class ErrorResponse(object):
         return '<ErrorResponse: %s>' % self.name
 
     def from_binary_string(self, stream):
+        """Unpack the error response from a stream."""
         command, code, identifier = struct.unpack(self.FORMAT, stream)
 
         if command != self.COMMAND:
@@ -65,4 +79,5 @@ class ErrorResponse(object):
         self.identifier = identifier
 
     def to_binary_string(self, code, identifier):
+        """Pack the error response to binary string and return it."""
         return struct.pack(self.FORMAT, self.COMMAND, code, identifier)
