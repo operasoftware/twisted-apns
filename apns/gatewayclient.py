@@ -1,6 +1,6 @@
 import logging
 
-from twisted.internet import ssl
+from twisted.internet import defer, ssl
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 
 from apns.errorresponse import ErrorResponse
@@ -28,19 +28,22 @@ class GatewayClient(Protocol):
     Implements client-side of APN gateway protocol. Should be spawned by
     GatewayClientFactory and generally should not be used standalone.
     """
+
+    @defer.inlineCallbacks
     def connectionMade(self):
         logger.debug('Gateway connection made: %s:%d', self.factory.hostname,
                      self.factory.port)
-        self.factory.connectionMade(self)
+        yield self.factory.connectionMade(self)
 
     def send(self, notification):
         stream = notification.to_binary_string()
         self.transport.write(stream)
 
+    @defer.inlineCallbacks
     def dataReceived(self, data):
         error = ErrorResponse()
         error.from_binary_string(data)
-        self.factory.errorReceived(error)
+        yield self.factory.errorReceived(error)
 
 
 class GatewayClientFactory(ReconnectingClientFactory, Listenable):
@@ -68,33 +71,37 @@ class GatewayClientFactory(ReconnectingClientFactory, Listenable):
         with open(pem) as f:
             self.certificate = ssl.PrivateCertificate.loadPEM(f.read())
 
+    @defer.inlineCallbacks
     def connectionMade(self, client):
         self.client = client
-        self.dispatchEvent(self.EVENT_CONNECTION_MADE)
+        yield self.dispatchEvent(self.EVENT_CONNECTION_MADE)
 
+    @defer.inlineCallbacks
     def _onConnectionLost(self):
         self.client = None
-        self.dispatchEvent(self.EVENT_CONNECTION_LOST)
+        yield self.dispatchEvent(self.EVENT_CONNECTION_LOST)
 
+    @defer.inlineCallbacks
     def errorReceived(self, error):
         logger.debug('Gateway error received: %s', error)
-        self.dispatchEvent(self.EVENT_ERROR_RECEIVED, error)
+        yield self.dispatchEvent(self.EVENT_ERROR_RECEIVED, error)
 
+    @defer.inlineCallbacks
     def clientConnectionFailed(self, connector, reason):
         logger.debug('Gateway connection failed: %s',
                      reason.getErrorMessage())
-        self._onConnectionLost()
-        return ReconnectingClientFactory.clientConnectionFailed(self,
-                                                                connector,
-                                                                reason)
-
+        yield self._onConnectionLost()
+        yield ReconnectingClientFactory.clientConnectionFailed(self,
+                                                               connector,
+                                                               reason)
+    @defer.inlineCallbacks
     def clientConnectionLost(self, connector, reason):
         logger.debug('Gateway connection lost: %s',
                      reason.getErrorMessage())
-        self._onConnectionLost()
-        return ReconnectingClientFactory.clientConnectionLost(self,
-                                                              connector,
-                                                              reason)
+        yield self._onConnectionLost()
+        yield ReconnectingClientFactory.clientConnectionLost(self,
+                                                             connector,
+                                                             reason)
 
     @property
     def connected(self):

@@ -1,6 +1,6 @@
 import logging
 
-from twisted.internet import ssl
+from twisted.internet import defer, ssl
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 
 from apns.feedback import Feedback
@@ -19,9 +19,10 @@ class FeedbackClient(Protocol):
         logger.debug('Feedback connection made: %s:%d', self.factory.hostname,
                      self.factory.port)
 
+    @defer.inlineCallbacks
     def dataReceived(self, data):
         feedbacks = Feedback.from_binary_string(data)
-        self.factory.feedbacksReceived(feedbacks)
+        yield self.factory.feedbacksReceived(feedbacks)
 
 
 class FeedbackClientFactory(ReconnectingClientFactory, Listenable):
@@ -51,9 +52,10 @@ class FeedbackClientFactory(ReconnectingClientFactory, Listenable):
         with open(pem) as f:
             self.certificate = ssl.PrivateCertificate.loadPEM(f.read())
 
+    @defer.inlineCallbacks
     def feedbacksReceived(self, feedbacks):
         logger.debug('Feedbacks received: %s', feedbacks)
-        self.dispatchEvent(self.EVENT_FEEDBACKS_RECEIVED, feedbacks)
+        yield self.dispatchEvent(self.EVENT_FEEDBACKS_RECEIVED, feedbacks)
 
     def clientConnectionFailed(self, connector, reason):
         logger.debug('Feedback connection failed: %s',

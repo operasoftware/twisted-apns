@@ -1,5 +1,7 @@
 from collections import defaultdict
 
+from twisted.internet import defer
+
 
 class Listenable(object):
     """Implements basic listener/observer model for derivative classes."""
@@ -29,6 +31,7 @@ class Listenable(object):
         else:
             return True
 
+    @defer.inlineCallbacks
     def dispatchEvent(self, event, *args):
         """
         Fire all callbacks assigned to a particular event. To be called by
@@ -37,4 +40,4 @@ class Listenable(object):
         function.
         """
         for callback in self.listeners[event]:
-            callback(event, self, *args)
+            yield callback(event, self, *args)
