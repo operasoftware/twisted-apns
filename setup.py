@@ -2,7 +2,7 @@
 from distutils.core import setup
 
 
-VERSION = '0.12'
+VERSION = '0.13'
 URL = 'https://github.com/operasoftware/twisted-apns'
 DOWNLOAD_URL = URL + '/tarball/' + VERSION
 
