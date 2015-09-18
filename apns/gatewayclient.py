@@ -35,9 +35,10 @@ class GatewayClient(Protocol):
                      self.factory.port)
         yield self.factory.connectionMade(self)
 
+    @defer.inlineCallbacks
     def send(self, notification):
         stream = notification.to_binary_string()
-        self.transport.write(stream)
+        yield self.transport.write(stream)
 
     @defer.inlineCallbacks
     def dataReceived(self, data):
@@ -108,6 +109,7 @@ class GatewayClientFactory(ReconnectingClientFactory, Listenable):
         """Return True if connection with APN is established."""
         return self.client is not None
 
+    @defer.inlineCallbacks
     def send(self, notification):
         """Send prepared notification to the APN."""
         logger.debug('Gateway send notification')
@@ -115,4 +117,4 @@ class GatewayClientFactory(ReconnectingClientFactory, Listenable):
         if self.client is None:
             raise GatewayClientNotSetError()
 
-        self.client.send(notification)
+        yield self.client.send(notification)

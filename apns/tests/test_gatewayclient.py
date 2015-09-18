@@ -1,4 +1,5 @@
 from mock import Mock, patch
+from twisted.internet import defer
 from twisted.trial.unittest import TestCase
 
 from apns.errorresponse import ErrorResponse
@@ -98,9 +99,10 @@ class GatewayClientFactoryTestCase(TestCase):
         self.factory.client = None
         self.assertFalse(self.factory.connected)
 
+    @defer.inlineCallbacks
     def test_send_client_not_set(self):
         with self.assertRaises(GatewayClientNotSetError):
-            self.factory.send(Mock())
+            yield self.factory.send(Mock())
 
     def test_send_client_set(self):
         notification = Mock()
